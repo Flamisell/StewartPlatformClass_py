@@ -57,10 +57,10 @@ jacobian = platform.getJacobian()
 ```
 
 # Forward Kinematics
-Determine the pose of the platform given the lengths of the legs.
+Determine the pose of the platform given the lengths of the legs and a starting guess.
 
 ```
-starting_pose = [0.1, 0.2, 0.3, 10, 20, 30]
+starting_pose = [0, 0, 0.3, 0, 0, 0]
 lengths_desired = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5]
 pose = platform.getFK(starting_pose, lengths_desired)
 
