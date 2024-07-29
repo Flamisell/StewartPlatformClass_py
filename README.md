@@ -2,6 +2,7 @@
 
 This Python class, `StewartPlatform`, provides a comprehensive implementation for analyzing a Stewart platform, a type of parallel manipulator used in robotics and automation. This class includes methods for **Inverse Kinematics**, **Forward Kinematics**, **Jacobian matrix computation**, **Kinematic and Force Analysis**, and **Workspace Analysis**. Check the preview of the .ipynb file for more info.
 
+<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform1.png" width="330"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform2.png" width="330"><img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform3.png" width="330">
 ## Table of Contents
 
 - [Installation](#installation)
@@ -32,64 +33,88 @@ To create an instance of the StewartPlatform class, you need to provide the foll
 - r_p: Radius of the platform.
 - phi_p: Angle between platform joints.
 ```
-from stewart_platform import StewartPlatform
+# Define parameters
+r_b = 0.5  # Radius of base
+phi_b = 50  # Angle between base joints
+r_p = 0.3  # Radius of platform
+phi_p = 80  # Angle between platform joints
 
-r_b = 1.0
-phi_b = 80.0
-r_p = 0.5
-phi_p = 30.0
-
+# Create Stewart Platform instance
 platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 ```
 
 # Inverse Kinematics
 Calculate the lengths of the platform legs given a pose (position and orientation).
 ```
-pose = [0.1, 0.2, 0.3, 10, 20, 30]  # [x, y, z, roll, pitch, yaw]
+pose = [0.2, 0, 0.6, 10, 20, 0]  # [x, y, z, roll, pitch, yaw]
 leg_lengths = platform.getIK(pose)
+platform.plot()
 ```
+<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/IK_platform.png" width="500">
+
 
 # Jacobian Matrix
 Compute the Jacobian matrix, which relates joint velocities to end-effector velocities.
 
 ```
-jacobian = platform.getJacobian()
+jacobian_matrix = platform.getJacobian()
 ```
 
 # Forward Kinematics
 Determine the pose of the platform given the lengths of the legs and a starting guess.
 
 ```
-starting_pose = [0, 0, 0.3, 0, 0, 0]
-lengths_desired = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5]
-pose = platform.getFK(starting_pose, lengths_desired)
+starting_pose = [0, 0, 0.2, 0, 0, 0]  # Initial guess for the pose
+lengths_desired = np.linalg.norm(leg_lengths,axis=1)  # Use the lengths obtained from IK
+plot=True
+estimated_pose = platform.getFK(starting_pose, lengths_desired, plot)
 
 ```
+<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform1.png" width="330"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform2.png" width="330"><img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform3.png" width="330">
+
+
+
+
 # Kinematic Analysis
 Calculate various kinematic indices.
 
 ```
+# Get Singular Value Index
+# measures drive capability of the platform, finds max q_dot under unitary x_dot
 singular_value_index = platform.getSingularValueIndex()
 
+# Get Manipulability Index
+# Measures manipulability of manipulator, can be used to optimize it's configuration
 manipulability_index = platform.getManipulabilityIndex()
 
+# Get Condition Number
+# Measures closeness to isotropic configuration [1,+ inf)
 condition_number = platform.getConditionNumber()
 
+# Get Local Condition Index
+# Measures closeness to isotropic configuration (0,1]
 local_condition_index = platform.getLocalConditionIndex()
+
+
 ```
 
 # Force Analysis
 Analyze the forces in the platform and actuators.
 
 ```
-F_actuators = [10, 20, 30, 40, 50, 60]
+# Calculate Platform Forces given Actuator Forces
+F_actuators = [10, 10, 10, 10, 10, 10]  # Example actuator forces
 F_platform = platform.getPlatformForces(F_actuators)
 
-F_platform_desired = [15, 25, 35, 45, 55, 65]
-F_actuators_required = platform.getActuatorForces(F_platform_desired)
+# Calculate Actuator Forces given Platform Forces
+F_platform = [10, 10, 10, 10, 10, 10]  # Example platform forces
+F_actuators = platform.getActuatorForces(F_platform)
 
+# Get Force Ellipsoid
 force_ellipsoid = platform.getForceEllipsoid()
 
+# Get Local Design Index (LDI)
+# Local design index for Force transmittability (actuator design)
 ldi = platform.getLDI()
 
 ```
@@ -98,20 +123,32 @@ ldi = platform.getLDI()
 Evaluate the platform's workspace with respect to position and orientation.
 
 ```
-workspace_limits = [-1, 1, -1, 1, -1, 1]  # [x_min, x_max, y_min, y_max, z_min, z_max]
-RPY = [0, 0, 0]  # [roll, pitch, yaw]
-N = 10  # Discretization parameter
-choice = 1  # Index calculation choice
+# Define workspace limits [x_min, x_max, y_min, y_max, z_min, z_max]
+workspace_limits = [-0.5, 0.5, -0.5, 0.5, 0.1, 0.6]
+RPY = [0, 0, 0]  # Fixed orientation (roll, pitch, yaw)
+N = 10  # Number of points in each dimension
+choice = 4  # Choice of index calculation (1: Singular Value Index, etc.)
+            # self.options = {
+            #     1: self.getSingularValueIndex, # measures drive capability of the platform, finds max q_dot under unitary x_dot
+            #     2: self.getManipulabilityIndex,# Measures manipulability of manipulator, can be used to optimize it's configuration
+            #     3: self.getConditionNumber,# Measures closeness to isotropic configuration [1,+ inf)
+            #     4: self.getLocalConditionIndex,# Measures closeness to isotropic configuration (0,1]
+            #     5: self.getLDI # Local design index for Force transmittability (actuator design)
+            # }
 
-index_workspace_position = platform.getIndexWorkspacePosition(workspace_limits, RPY, N, choice)
+workspace_indices_position = platform.getIndexWorkspacePosition(workspace_limits, RPY, N, choice)
+print("Workspace Indices (Position):", workspace_indices_position)
 
-position = [0.1, 0.2, 0.3]
-orientation_limits = [-30, 30, -30, 30, -30, 30]  # [roll_min, roll_max, pitch_min, pitch_max, yaw_min, yaw_max]
+# Define orientation limits [roll_min, roll_max, pitch_min, pitch_max, yaw_min, yaw_max]
+orientation_limits = [-10, 10, -10, 10, -10, 10]
+position = [0, 0, 0.4]  # Fixed position
 
-index_workspace_orientation = platform.getIndexWorkspaceOrientation(position, orientation_limits, N, choice)
+workspace_indices_orientation = platform.getIndexWorkspaceOrientation(position, orientation_limits, N, choice)
+print("Workspace Indices (Orientation):", workspace_indices_orientation)
 
 ```
-
+There is also the possibility to use plotly to plot the values in all the defined workspace
+<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot.png" width="400"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot%20(1).png" width="400">
 ## Methods Overview
 - **getIK(pose):** Computes inverse kinematics.
 - **getJacobian():** Returns the Jacobian matrix.
