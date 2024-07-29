@@ -1,6 +1,6 @@
 # Stewart Platform Class
 
-This Python class, `StewartPlatform`, provides a comprehensive implementation for analyzing a Stewart platform, a type of parallel manipulator used in robotics and automation. This class includes methods for **inverse kinematics**, **forward kinematics**, **Jacobian matrix computation**, **kinematic and force analysis**, and **workspace analysis**. Check the preview of the .ipynb file for more info.
+This Python class, `StewartPlatform`, provides a comprehensive implementation for analyzing a Stewart platform, a type of parallel manipulator used in robotics and automation. This class includes methods for **Inverse Kinematics**, **Forward Kinematics**, **Jacobian matrix computation**, **Kinematic and Force Analysis**, and **Workspace Analysis**. Check the preview of the .ipynb file for more info.
 
 ## Table of Contents
 
