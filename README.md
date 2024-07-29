@@ -2,7 +2,7 @@
 
 This Python class, `StewartPlatform`, provides a comprehensive implementation for analyzing a Stewart platform, a type of parallel manipulator used in robotics and automation. This class includes methods for **Inverse Kinematics**, **Forward Kinematics**, **Jacobian matrix computation**, **Kinematic and Force Analysis**, and **Workspace Analysis**. Check the preview of the .ipynb file for more info.
 
-<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform3.png" width="330"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot.png" width="330"> 
+<img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/FKplatform3.png" width="400"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot.png" width="400"> 
 ## Table of Contents
 
 - [Installation](#installation)
