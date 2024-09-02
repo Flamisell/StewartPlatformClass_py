@@ -14,6 +14,7 @@ This Python class, `StewartPlatform`, provides a comprehensive implementation fo
   - [Kinematic Analysis](#kinematic-analysis)
   - [Force Analysis](#force-analysis)
   - [Workspace Analysis](#workspace-analysis)
+  - [Singularity Finder](#singularity-finder)
 - [Methods Overview](#methods-overview)
 
 ## Installation
@@ -149,6 +150,26 @@ print("Workspace Indices (Orientation):", workspace_indices_orientation)
 ```
 There is also the possibility to use plotly to plot the values in all the defined workspace
 <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot.png" width="400"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot%20(1).png" width="400">
+
+# Singularity Finder
+Evaluate singularities over a range of positions in the workspace.
+
+```
+# Define workspace limits 
+workspace_limits = [-0.5, 0.5, -0.5, 0.5, 0.1, 0.6]
+orientation_limits = [-10, 10, -10, 10, -10, 10]
+# Define number of points for dimension
+N_pos = 10  # Number of points in each dimension
+N_orient = 10  # Number of points in each dimension
+
+# Choosing N_pos and N_orient too high may result in a computational expensive operation, suggested values ( N_pos=10, N_orient=10 )
+# for practical usage there is the need to filter the data. Suggestion: filter by local condition index value AND by distance between data points (from scipy.spatial.distance import cdist).
+
+singularities_task_space = spider.getSingularityWorkspace(workspace_limits,orientation_limits,N_pos,N_orient) # find singularities in all space
+
+print("Singularities in task space:", singularities_task_space)
+```
+
 ## Methods Overview
 - **getIK(pose):** Computes inverse kinematics.
 - **getJacobian():** Returns the Jacobian matrix.
@@ -163,4 +184,5 @@ There is also the possibility to use plotly to plot the values in all the define
 - **getLDI():** Returns the local design index.
 - **getIndexWorkspacePosition(workspace_limits, RPY, N, choice):** Analyzes workspace based on position.
 - **getIndexWorkspaceOrientation(position, orientation_limits, N, choice):** Analyzes workspace based on orientation.
+- **getSingularityWorkspace(workspace_limits,orientation_limits,N_pos,N_orient):** Evaluate singularities over a range of positions in the workspace.
 - **plot():** Plots the Stewart platform configuration.
