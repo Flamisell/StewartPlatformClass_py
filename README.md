@@ -135,6 +135,8 @@ choice = 4  # Choice of index calculation (1: Singular Value Index, etc.)
             #     3: self.getConditionNumber,# Measures closeness to isotropic configuration [1,+ inf)
             #     4: self.getLocalConditionIndex,# Measures closeness to isotropic configuration (0,1]
             #     5: self.getLDI # Local design index for Force transmittability (actuator design)
+            #     6: self.getLocalConditionIndexT # Measures closeness to force isotropic configuration, 0 when joint forces go to infinity.
+
             # }
 
 workspace_indices_position = platform.getIndexWorkspacePosition(workspace_limits, RPY, N, choice)
