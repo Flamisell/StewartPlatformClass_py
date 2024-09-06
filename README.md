@@ -27,7 +27,7 @@ pip install numpy scipy matplotlib
 
 ## Usage
 
-# Initialization
+### Initialization
 To create an instance of the StewartPlatform class, you need to provide the following parameters:
 - r_b: Radius of the base.
 - phi_b: Angle between base joints.
@@ -44,7 +44,7 @@ phi_p = 80  # Angle between platform joints
 platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 ```
 
-# Inverse Kinematics
+### Inverse Kinematics
 Calculate the lengths of the platform legs given a pose (position and orientation).
 ```
 pose = [0.2, 0, 0.6, 10, 20, 0]  # [x, y, z, roll, pitch, yaw]
@@ -54,14 +54,14 @@ platform.plot()
 <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/IK_platform.png" width="500">
 
 
-# Jacobian Matrix
+### Jacobian Matrix
 Compute the Jacobian matrix, which relates joint velocities to end-effector velocities.
 
 ```
 jacobian_matrix = platform.getJacobian()
 ```
 
-# Forward Kinematics
+### Forward Kinematics
 Determine the pose of the platform given the lengths of the legs and a starting guess.
 
 ```
@@ -76,7 +76,7 @@ estimated_pose = platform.getFK(starting_pose, lengths_desired, plot)
 
 
 
-# Kinematic Analysis
+### Kinematic Analysis
 Calculate various kinematic indices.
 
 ```
@@ -99,7 +99,7 @@ local_condition_index = platform.getLocalConditionIndex()
 
 ```
 
-# Force Analysis
+### Force Analysis
 Analyze the forces in the platform and actuators.
 
 ```
@@ -120,7 +120,7 @@ ldi = platform.getLDI()
 
 ```
 
-# Workspace Analysis
+### Workspace Analysis
 Evaluate the platform's workspace with respect to position and orientation.
 
 ```
@@ -152,7 +152,7 @@ print("Workspace Indices (Orientation):", workspace_indices_orientation)
 There is also the possibility to use plotly to plot the values in all the defined workspace
 <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot.png" width="400"> <img src="https://github.com/Flamisell/StewartPlatform_py/blob/main/img/newplot%20(1).png" width="400">
 
-# Singularity Finder
+### Singularity Finder
 Evaluate singularities over a range of positions in the workspace.
 
 ```
