@@ -21,7 +21,7 @@ This Python class, `StewartPlatform`, provides a comprehensive implementation fo
 
 Ensure you have the required dependencies installed:
 
-```bash
+```python
 pip install numpy scipy matplotlib
 ```
 
@@ -33,7 +33,7 @@ To create an instance of the StewartPlatform class, you need to provide the foll
 - phi_b: Angle between base joints.
 - r_p: Radius of the platform.
 - phi_p: Angle between platform joints.
-```
+```python
 # Define parameters
 r_b = 0.5  # Radius of base
 phi_b = 50  # Angle between base joints
@@ -46,7 +46,7 @@ platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 
 ### Inverse Kinematics
 Calculate the lengths of the platform legs given a pose (position and orientation).
-```
+```python
 pose = [0.2, 0, 0.6, 10, 20, 0]  # [x, y, z, roll, pitch, yaw]
 leg_lengths = platform.getIK(pose)
 platform.plot()
@@ -57,14 +57,14 @@ platform.plot()
 ### Jacobian Matrix
 Compute the Jacobian matrix, which relates joint velocities to end-effector velocities.
 
-```
+```python
 jacobian_matrix = platform.getJacobian()
 ```
 
 ### Forward Kinematics
 Determine the pose of the platform given the lengths of the legs and a starting guess.
 
-```
+```python
 starting_pose = [0, 0, 0.2, 0, 0, 0]  # Initial guess for the pose
 lengths_desired = np.linalg.norm(leg_lengths,axis=1)  # Use the lengths obtained from IK
 plot=True
@@ -79,7 +79,7 @@ estimated_pose = platform.getFK(starting_pose, lengths_desired, plot)
 ### Kinematic Analysis
 Calculate various kinematic indices.
 
-```
+```python
 # Get Singular Value Index
 # measures drive capability of the platform, finds max q_dot under unitary x_dot
 singular_value_index = platform.getSingularValueIndex()
@@ -102,7 +102,7 @@ local_condition_index = platform.getLocalConditionIndex()
 ### Force Analysis
 Analyze the forces in the platform and actuators.
 
-```
+```python
 # Calculate Platform Forces given Actuator Forces
 F_actuators = [10, 10, 10, 10, 10, 10]  # Example actuator forces
 F_platform = platform.getPlatformForces(F_actuators)
@@ -123,7 +123,7 @@ ldi = platform.getLDI()
 ### Workspace Analysis
 Evaluate the platform's workspace with respect to position and orientation.
 
-```
+```python
 # Define workspace limits [x_min, x_max, y_min, y_max, z_min, z_max]
 workspace_limits = [-0.5, 0.5, -0.5, 0.5, 0.1, 0.6]
 RPY = [0, 0, 0]  # Fixed orientation (roll, pitch, yaw)
@@ -155,7 +155,7 @@ There is also the possibility to use plotly to plot the values in all the define
 ### Singularity Finder
 Evaluate singularities over a range of positions in the workspace.
 
-```
+```python
 # Define workspace limits 
 workspace_limits = [-0.5, 0.5, -0.5, 0.5, 0.1, 0.6]
 orientation_limits = [-10, 10, -10, 10, -10, 10]
